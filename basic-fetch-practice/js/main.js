@@ -5,20 +5,19 @@ const allBtn = document.getElementById("load-all");
 const filteredBtn = document.getElementById("load-filtered");
 const resetBtn = document.getElementById("reset");
 const container = document.querySelector(".user-container");
+const cardsGrid = document.querySelector('.cards-grid');
 
 function renderCards(users) {
   clearCards();
   users.forEach((user) => {
-    console.log("Rendering user:", user.name); // log each user name
     const card = createUserCard(user);
-    container.appendChild(card);
+    cardsGrid.appendChild(card);
   });
 }
 
 allBtn.addEventListener("click", async () => {
   try {
     const users = await fetchUsers();
-    console.log("Users fetched:", users);
     renderCards(users);
   } catch (err) {
     console.error("Error loading all users:", err);
@@ -29,7 +28,7 @@ filteredBtn.addEventListener("click", async () => {
   try {
     const users = await fetchUsers();
     const filteredUsers = users.filter(
-      (u) => u?.employment?.years != null && u.employment.years < 10
+      (u) => typeof u.yearsEmployed === 'number' && u.yearsEmployed < 10
     );
     renderCards(filteredUsers);
   } catch (err) {
@@ -39,31 +38,6 @@ filteredBtn.addEventListener("click", async () => {
 
 resetBtn.addEventListener("click", () => {
   clearCards();
-});
-
-allBtn.addEventListener("click", async () => {
-  try {
-    const users = await fetchUsers();
-    console.log("Fetched users:", users); // <--- ADD THIS
-    renderCards(users);
-  } catch (err) {
-    console.error("Error loading all users:", err);
-  }
-});
-
-filteredBtn.addEventListener("click", async () => {
-  try {
-    const users = await fetchUsers();
-
-    const filteredUsers = users.filter(
-      (u) => u.yearsAtCompany && u.yearsAtCompany < 10
-    );
-
-    console.log("Filtered users:", filteredUsers);
-    renderCards(filteredUsers);
-  } catch (err) {
-    console.error("Error loading filtered users:", err);
-  }
 });
 
 function generateRandomUsers(count = 10) {

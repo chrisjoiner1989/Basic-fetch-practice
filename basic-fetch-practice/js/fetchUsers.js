@@ -1,5 +1,3 @@
-// js/fetchUsers.js
-
 export async function fetchUsers() {
   try {
     const response = await fetch(
